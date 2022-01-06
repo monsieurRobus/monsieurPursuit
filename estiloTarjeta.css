@@ -1,0 +1,62 @@
+/* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
+.tarjeta {
+    background-color: transparent;
+    width: 800px;
+    height: 400px;
+    border: 1px solid #f1f1f1;
+    perspective: 1000px; /* Remove this if you don't want the 3D effect */
+  }
+  
+  /* This container is needed to position the front and back side */
+  .tarjeta-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
+
+  .tarjeta-pregunta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    left: 50px;
+    top: 50px;
+    width: 700px;
+    height: 300px;
+    background-color: #f1f1f1;
+
+  }
+
+  .tarjeta-contenido {
+      
+  }
+  
+  /* Do an horizontal flip when you move the mouse over the flip box container */
+ .girar .tarjeta-inner {
+    transform: rotateY(180deg);
+  }
+  
+  /* Position the front and back side */
+  .tarjeta-front, .tarjeta-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+  }
+  
+  /* Style the front side (fallback if image is missing) */
+  .tarjeta-front {
+    background-color: #5994aa;
+    color: black;
+  }
+  
+  /* Style the back side */
+  .tarjeta-back {
+    background-color: #5994aa;
+    color: white;
+    transform: rotateY(180deg);
+  }

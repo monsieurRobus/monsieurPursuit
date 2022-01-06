@@ -1,0 +1,134 @@
+
+
+<html>
+    <head>
+        <link rel="stylesheet" href="estiloTarjeta.css">
+        <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+        <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+        <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";            
+          
+            
+
+            // CONFIGURACION DE LA BASE DE DATOS 
+            const firebaseConfig = {
+              apiKey: "AIzaSyBeFVAKcmVVMnkTF1Z2EVFSAahdCHKcvjA",
+              authDomain: "monsieurloresuit.firebaseapp.com",
+              projectId: "monsieurloresuit",
+              storageBucket: "monsieurloresuit.appspot.com",
+              messagingSenderId: "617689812422",
+              databaseURL: "https://monsieurloresuit-default-rtdb.europe-west1.firebasedatabase.app",
+              appId: "1:617689812422:web:f767dc493d6d9e343076c7"
+            };
+          
+            // Initialize database
+            const app = initializeApp(firebaseConfig);
+            var uno = 1;
+            var dos = "dos";
+            var tres = "III";
+
+
+            import { getDatabase, ref, set, get, child, update, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+            const database = getDatabase();
+
+            var pregunta = document.getElementById("enunciadoPregunta");
+            var respuesta = document.getElementById("respuesta");
+
+            // Funcion cogedatos
+
+            function meteDatos(){
+              set(ref(database, "Probaturas un dos tres"),
+              {
+               Uno:  uno,
+               Dos: dos,
+               Tres: tres
+              }).then(()=>{
+                alert("dataEnviada");
+              })
+              .catch((error)=>{
+                alert("CAPACHAO");
+              })
+            }
+            
+
+            function seleccionaDatos(numPregunta){
+              const dbref = ref(database);
+
+              get(child(dbref,"preguntas/"+numPregunta.toString())).then((snapshot)=>{
+                if(snapshot.exists()){
+                  pregunta.innerHTML = snapshot.val().enunciado;
+                  respuesta.innerHTML = snapshot.val().respuesta;
+                  console.log("dentro")
+                }
+                else {
+                  alert("no hay datos");                }
+              })
+              .catch((error)=>{
+                alert("NOOOPE "+error);
+              });
+            }
+
+            seleccionaDatos(0);
+            
+            </script>
+    </head>
+    <body>
+        <div id="tgt" class="tarjeta">
+            <div class="tarjeta-inner">
+              <div class="tarjeta-front">
+                <div class="tarjeta-pregunta">
+                    <div id="enunciadoPregunta" class="tarjeta-contenido-pregunta">
+                        Esto es una prueba
+                    </div>
+                </div>
+              </div>
+              <div class="tarjeta-back">
+                  <div class="tarjeta-pregunta">
+                      <div class="tarjeta-contenido-pregunta">
+                        <div id="respuesta" class="tarjeta-contenido">
+                            lololo
+                          </div>
+                      </div>
+                    </div>
+              </div>
+            </div>
+          </div>
+          <script>
+
+            // ABRIMOS CANAL BROADCAST
+            const bc = new BroadcastChannel('tarjetaVoltear');
+            bc.onmessage = function (ev) { actualiza(ev) };
+            
+           
+            
+            
+            
+            // FUNCION DEL BROADCAT
+            function actualiza(ev){
+                var lista = document.getElementById("tgt").classList;
+                    var existeClase = false;
+                lista.forEach(element => 
+                    {
+                        if (element == "girar")
+                        {
+                            existeClase = true;
+                        }
+                    })
+
+                    if(existeClase)
+                    {
+                        document.getElementById("tgt").classList.remove("girar");
+                    }
+                    else
+                    {
+                        document.getElementById("tgt").classList.add("girar");
+                    }
+                    
+
+            }
+          </script>
+        </body>
+    
+</html>

@@ -1,0 +1,19 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <button onclick="actualiza()">
+            TEST
+        </button>
+        <input id="numero" type="number">
+        <script>
+            const bc = new BroadcastChannel('tarjetaVoltear');
+
+            function actualiza() {
+                bc.postMessage("voltea");
+                console.log(tag);
+    }
+        </script>
+    </body>
+</html>
