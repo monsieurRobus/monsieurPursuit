@@ -25,9 +25,7 @@
           
             // Initialize database
             const app = initializeApp(firebaseConfig);
-            var uno = 1;
-            var dos = "dos";
-            var tres = "III";
+           
 
 
             import { getDatabase, ref, set, get, child, update, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
@@ -36,22 +34,7 @@
             var pregunta = document.getElementById("enunciadoPregunta");
             var respuesta = document.getElementById("respuesta");
 
-            // Funcion cogedatos
-
-            function meteDatos(){
-              set(ref(database, "Probaturas un dos tres"),
-              {
-               Uno:  uno,
-               Dos: dos,
-               Tres: tres
-              }).then(()=>{
-                alert("dataEnviada");
-              })
-              .catch((error)=>{
-                alert("CAPACHAO");
-              })
-            }
-            
+                    
 
             function seleccionaDatos(numPregunta){
               const dbref = ref(database);
@@ -70,7 +53,7 @@
               });
             }
 
-            seleccionaDatos(0);
+            seleccionaDatos(2);
             
             </script>
     </head>

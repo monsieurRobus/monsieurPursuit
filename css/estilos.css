@@ -74,3 +74,23 @@ form {
       width: 100%;
     }
   }
+
+
+  .columna {
+
+    float: left;
+    width: 45%;
+    padding: 1rem;
+  }
+
+  .fila:after {
+    content:"";
+    display: table;
+    clear: both;
+    padding: 1rem;
+  }
+
+  .containerPregunta {
+    background-color: #f5f5f5;
+    padding: 1rem;
+  }

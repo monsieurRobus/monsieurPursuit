@@ -1,0 +1,180 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="css/estilos.css">
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";            
+               
+
+         // CONFIGURACION DE LA BASE DE DATOS 
+         const firebaseConfig = {
+           apiKey: "AIzaSyBeFVAKcmVVMnkTF1Z2EVFSAahdCHKcvjA",
+           authDomain: "monsieurloresuit.firebaseapp.com",
+           projectId: "monsieurloresuit",
+           storageBucket: "monsieurloresuit.appspot.com",
+           messagingSenderId: "617689812422",
+           databaseURL: "https://monsieurloresuit-default-rtdb.europe-west1.firebasedatabase.app",
+           appId: "1:617689812422:web:f767dc493d6d9e343076c7"
+         };
+       
+         // Initialize database
+         const app = initializeApp(firebaseConfig);
+       
+         import { getDatabase, ref, set, get, child, update, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+         const database = getDatabase();
+
+         // IDS de elementos
+         var idPregunta = document.getElementById("idPregunta");
+         var pregunta = document.getElementById("enunciadoPregunta");
+         var respuesta = document.getElementById("respuesta");     
+         var categoria = document.getElementById("categoria");    
+         var listaPreguntas = document.getElementById("listaPreguntas");
+      
+
+         // Funcion borradato
+
+         var borraDato = (i) => {
+             alert("hacer funcion para borrar dato "+i);
+         }
+           // Funcion cogedatos
+
+        var meteDatos = () =>{
+
+                if(confirm("¿Estás seguro que quieres enviar esta pregunta?") == true) {
+
+                    var numPregunta = idPregunta.innerHTML;
+            set(ref(database, "preguntas/"+numPregunta),
+            {
+                enunciado: pregunta.value,
+                respuesta: respuesta.value,
+                categoria: categoria.value
+            }).then(()=>{
+
+                alert("Datos enviados");
+                listaDatos();
+            })
+            .catch((error)=>{
+                alert("CAPACHAO");
+            })
+
+                }
+                else {
+                    console.log("cancelado");
+                }          
+            
+            }
+
+         // Funcion de lista de datos
+        function listaDatos(){
+
+            const dbref = ref(database);
+            get(child(dbref,"preguntas")).then((snapshot)=>{
+                if(snapshot.exists()){
+                    listaPreguntas.innerHTML = snapshot.val();
+                    
+                    // Longitud de la lista
+                    var longitud = Object.keys(snapshot.val()).length;
+                    listaPreguntas.innerHTML ="";
+                    for(var i=0;i<longitud;i++)
+                    {
+
+                        listaPreguntas.innerHTML += "<div class='containerPregunta' id='pregunta"+i+"'><div>ID PREGUNTA "+i+"<span onclick='borraDato("+i+")'>&#10060;</span></div><h3>"+snapshot.val()[i].categoria+"</h3><p>"+snapshot.val()[i].enunciado+"</p><p>"+snapshot.val()[i].respuesta+"</p></div>"
+                        
+                    }
+
+
+                }
+                else {
+                alert("no hay datos");                }
+            })
+            .catch((error)=>{
+                alert("NOOOPE\n\n"+error);
+            });
+        }
+
+        // Selecciona un dato en concreto
+        function seleccionaDatos(numPregunta){
+           const dbref = ref(database);
+
+           get(child(dbref,"preguntas/"+numPregunta.toString())).then((snapshot)=>{
+             if(snapshot.exists()){
+                 idPregunta.innerHTML = numPregunta;
+                 pregunta.value = snapshot.val().enunciado;
+                 respuesta.value = snapshot.val().respuesta;
+                 categoria.value = snapshot.val().categoria;
+                 listaDatos();
+             }
+             else {
+               alert("no hay datos");                }
+           })
+           .catch((error)=>{
+             alert("NOOOPE "+error);
+           });
+         }
+         
+
+
+         //Introduce nueva pregunta
+         var nuevaPregunta = () => {
+            const dbref = ref(database);
+            get(child(dbref,"preguntas")).then((snapshot)=>{
+                if(snapshot.exists()){
+                    
+                    // Longitud de la lista
+                    var longitud = Object.keys(snapshot.val()).length;
+                    
+                    idPregunta.innerHTML = longitud;
+                    pregunta.value = "";
+                    respuesta.value = "";
+                    categoria.value = "";
+                }
+                else {
+                alert("no hay datos");                }
+            })
+            .catch((error)=>{
+                alert("NOOOPE "+error);
+            });
+         }
+        
+         document.getElementById('enviar').addEventListener('click', meteDatos);
+         document.getElementById('nuevaPregunta').addEventListener('click', nuevaPregunta);
+
+         seleccionaDatos(0);
+         listaDatos();
+
+
+         
+
+       </script>
+        
+    </head>
+    <body>        
+        <div class="fila">
+            <section id="selectorTemas" class="columna">
+                <h1>Pregunta <snap id="idPregunta"></snap></h1>
+                <label for="categoria">Categoría</label>
+                <input type="text" id="categoria">
+                <label for="enunciadoPregunta">Nombre </label>
+                <input type="text" id="enunciadoPregunta">                
+                <label for="respuesta">Respuesta</label>
+                <input type="text" id="respuesta">
+                
+                <button id="enviar">Enviar/Actualizar</button>
+                <button id="nuevaPregunta">NuevaPregunta</button>
+            </section>
+            <section id="inspector" class="columna">
+                <h1>
+                    Inspector de preguntas
+                </h1>
+                <div id="listaPreguntas">
+
+                </div>
+            </section>
+        </div>    
+        
+    
+    
+    
+    
+    </body>
+</html>
