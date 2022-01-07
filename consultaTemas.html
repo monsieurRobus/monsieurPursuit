@@ -29,6 +29,7 @@
          var respuesta = document.getElementById("respuesta");     
          var categoria = document.getElementById("categoria");    
          var listaPreguntas = document.getElementById("listaPreguntas");
+         var listaPreguntasSelector = document.getElementById("listaPreguntasSelector");
       
 
          // Funcion borradato
@@ -71,14 +72,14 @@
             get(child(dbref,"preguntas")).then((snapshot)=>{
                 if(snapshot.exists()){
                     listaPreguntas.innerHTML = snapshot.val();
-                    
+                    listaPreguntasSelector.innerHTML = ""
                     // Longitud de la lista
                     var longitud = Object.keys(snapshot.val()).length;
                     listaPreguntas.innerHTML ="";
                     for(var i=0;i<longitud;i++)
                     {
-
-                        listaPreguntas.innerHTML += "<div class='containerPregunta' id='pregunta"+i+"'><div>ID PREGUNTA "+i+"<span onclick='borraDato("+i+")'>&#10060;</span></div><h3>"+snapshot.val()[i].categoria+"</h3><p>"+snapshot.val()[i].enunciado+"</p><p>"+snapshot.val()[i].respuesta+"</p></div>"
+                        listaPreguntasSelector.innerHTML += "<option value='"+i+"'>Pregunta "+i+"</option>"
+                        listaPreguntas.innerHTML += "<div class='containerPregunta' id='pregunta"+i+"'><div>ID PREGUNTA "+i+"<span class='borrar' id="+i+">&#10060;</span></div><h3>"+snapshot.val()[i].categoria+"</h3><p>"+snapshot.val()[i].enunciado+"</p><p>"+snapshot.val()[i].respuesta+"</p></div>"
                         
                     }
 
@@ -135,7 +136,21 @@
                 alert("NOOOPE "+error);
             });
          }
-        
+
+         // FOCUS PREGUNTA SELECCIONADA
+
+         var focusPregunta = () =>
+         {
+             var idSeleccionada = parseInt(document.getElementById('listaPreguntasSelector').value,10);
+             seleccionaDatos(idSeleccionada);
+         }
+
+        // Añadimos funcion BORRADATO a cada elemento BORRAR
+     
+      
+             
+          
+         document.getElementById('listaPreguntasSelectorBoton').addEventListener('click',focusPregunta)
          document.getElementById('enviar').addEventListener('click', meteDatos);
          document.getElementById('nuevaPregunta').addEventListener('click', nuevaPregunta);
 
@@ -151,7 +166,13 @@
     <body>        
         <div class="fila">
             <section id="selectorTemas" class="columna">
-                <h1>Pregunta <snap id="idPregunta"></snap></h1>
+                <div>
+                    <h1>Pregunta <snap id="idPregunta"></snap></h1>
+                    <select id="listaPreguntasSelector" name="cars">                 
+                      </select>
+                      <button id="listaPreguntasSelectorBoton">Ver pregunta</button>
+                </div>
+
                 <label for="categoria">Categoría</label>
                 <input type="text" id="categoria">
                 <label for="enunciadoPregunta">Nombre </label>
@@ -171,6 +192,14 @@
                 </div>
             </section>
         </div>    
+        <script>
+               var listaBorrar = document.getElementsByClassName("borrar");
+               console.log(listaBorrar.length);
+               for (var i=0;i<listaBorrar.length;i++) {
+                    console.log(listaBorrar[i].id);
+                }
+
+        </script>
         
     
     
