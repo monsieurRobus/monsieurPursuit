@@ -35,8 +35,16 @@
          // Funcion borradato
 
          var borraDato = (i) => {
-             alert("hacer funcion para borrar dato "+i);
+            if(confirm("¿Estás seguro que quieres enviar esta pregunta?") == true) {
+                var numPregunta = idPregunta.innerHTML;
+                remove(ref(database,"preguntas/pr"+numPregunta));
+                listaDatos();
+                
          }
+            else {
+                alert("Los datos se han conservado");
+            }
+        }
            // Funcion cogedatos
 
         var meteDatos = () =>{
@@ -44,8 +52,9 @@
                 if(confirm("¿Estás seguro que quieres enviar esta pregunta?") == true) {
 
                     var numPregunta = idPregunta.innerHTML;
-            set(ref(database, "preguntas/"+numPregunta),
+            set(ref(database, "preguntas/pr"+numPregunta),
             {
+                id: idPregunta.innerHTML,
                 enunciado: pregunta.value,
                 respuesta: respuesta.value,
                 categoria: categoria.value
@@ -73,36 +82,54 @@
                 if(snapshot.exists()){
                     listaPreguntas.innerHTML = snapshot.val();
                     listaPreguntasSelector.innerHTML = ""
-                    // Longitud de la lista
-                    var longitud = Object.keys(snapshot.val()).length;
                     listaPreguntas.innerHTML ="";
-                    for(var i=0;i<longitud;i++)
+                    // Longitud de la lista de preguntas
+                    var preguntasKeys = Object.keys(snapshot.val());
+                    
+                    for(var i=0;i<preguntasKeys.length;i++)
                     {
-                        listaPreguntasSelector.innerHTML += "<option value='"+i+"'>Pregunta "+i+"</option>"
-                        listaPreguntas.innerHTML += "<div class='containerPregunta' id='pregunta"+i+"'><div>ID PREGUNTA "+i+"<span class='borrar' id="+i+">&#10060;</span></div><h3>"+snapshot.val()[i].categoria+"</h3><p>"+snapshot.val()[i].enunciado+"</p><p>"+snapshot.val()[i].respuesta+"</p></div>"
+                        var elementoPregunta =snapshot.val()[preguntasKeys[i]];
+                        listaPreguntasSelector.innerHTML += "<option value='"+elementoPregunta.id+"'>Pregunta "+elementoPregunta.id+"</option>"
+                        listaPreguntas.innerHTML += "<div class='containerPregunta' id='pregunta"+elementoPregunta.id+"'><div>ID PREGUNTA "+elementoPregunta.id+"<span class='borrar' id="+elementoPregunta.id+">&#10060;</span></div><h3>"+elementoPregunta.categoria+"</h3><p>"+elementoPregunta.enunciado+"</p><p>"+elementoPregunta.respuesta+"</p></div>"
                         
                     }
 
-
-                }
-                else {
-                alert("no hay datos");                }
+                    
+                
+            }
             })
             .catch((error)=>{
-                alert("NOOOPE\n\n"+error);
+                alert("Error\n\n"+error);
             });
         }
 
         // Selecciona un dato en concreto
-        function seleccionaDatos(numPregunta){
+        function seleccionaDatos(id){
            const dbref = ref(database);
 
-           get(child(dbref,"preguntas/"+numPregunta.toString())).then((snapshot)=>{
+
+           get(child(dbref,"preguntas")).then((snapshot)=>{
              if(snapshot.exists()){
-                 idPregunta.innerHTML = numPregunta;
-                 pregunta.value = snapshot.val().enunciado;
-                 respuesta.value = snapshot.val().respuesta;
-                 categoria.value = snapshot.val().categoria;
+
+                // Comprobamos si la ID de la pregunta existe
+                var listaPreguntasAux = Object.keys(snapshot.val());
+                console.log(listaPreguntasAux);
+
+                for(var i=0;i<listaPreguntasAux.length;i++)
+                {
+                    var elementoAux = snapshot.val()[listaPreguntasAux[i]];
+                    if (elementoAux.id == id) {
+                        idPregunta.innerHTML = elementoAux.id;
+                        pregunta.value = elementoAux.enunciado;
+                        respuesta.value = elementoAux.respuesta;
+                        categoria.value = elementoAux.categoria;
+                    }
+                    
+                    
+                    
+                }
+
+                 
                  listaDatos();
              }
              else {
@@ -123,8 +150,16 @@
                     
                     // Longitud de la lista
                     var longitud = Object.keys(snapshot.val()).length;
+                  
+                    if (longitud<1){
+                        idPregunta.innerHTML = 0;
+                    }
+                    else {
+                       
+                        idPregunta.innerHTML = parseInt(snapshot.val()[Object.keys(snapshot.val())[longitud-1]].id,10)+1;
+                    }
+                    console.log(snapshot.val()[Object.keys(snapshot.val())[longitud-1]].id);
                     
-                    idPregunta.innerHTML = longitud;
                     pregunta.value = "";
                     respuesta.value = "";
                     categoria.value = "";
@@ -147,15 +182,15 @@
 
         // Añadimos funcion BORRADATO a cada elemento BORRAR
      
-      
-             
-          
+                 
+         document.getElementById('borrar').addEventListener('click',borraDato);
          document.getElementById('listaPreguntasSelectorBoton').addEventListener('click',focusPregunta)
          document.getElementById('enviar').addEventListener('click', meteDatos);
          document.getElementById('nuevaPregunta').addEventListener('click', nuevaPregunta);
-
-         seleccionaDatos(0);
+         
          listaDatos();
+         seleccionaDatos(0);
+         
 
 
          
@@ -167,7 +202,7 @@
         <div class="fila">
             <section id="selectorTemas" class="columna">
                 <div>
-                    <h1>Pregunta <snap id="idPregunta"></snap></h1>
+                    <h1>Pregunta <span id="idPregunta"></span></h1>
                     <select id="listaPreguntasSelector" name="cars">                 
                       </select>
                       <button id="listaPreguntasSelectorBoton">Ver pregunta</button>
@@ -181,6 +216,7 @@
                 <input type="text" id="respuesta">
                 
                 <button id="enviar">Enviar/Actualizar</button>
+                <button id="borrar">Borrar</button>
                 <button id="nuevaPregunta">NuevaPregunta</button>
             </section>
             <section id="inspector" class="columna">
@@ -193,12 +229,7 @@
             </section>
         </div>    
         <script>
-               var listaBorrar = document.getElementsByClassName("borrar");
-               console.log(listaBorrar.length);
-               for (var i=0;i<listaBorrar.length;i++) {
-                    console.log(listaBorrar[i].id);
-                }
-
+              
         </script>
         
     
