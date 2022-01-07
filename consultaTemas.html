@@ -1,6 +1,9 @@
 <html>
     <head>
         <link rel="stylesheet" href="css/estilos.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
         <script type="module">
             // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";            
@@ -113,7 +116,7 @@
 
                 // Comprobamos si la ID de la pregunta existe
                 var listaPreguntasAux = Object.keys(snapshot.val());
-                console.log(listaPreguntasAux);
+                //console.log(listaPreguntasAux);
 
                 for(var i=0;i<listaPreguntasAux.length;i++)
                 {
@@ -133,7 +136,29 @@
                  listaDatos();
              }
              else {
-               alert("no hay datos");                }
+               alert("no hay datos");         
+                if(confirm("Deseas que se cree un dato estándar con la información básica necesaria?"))
+                {
+                    set(ref(database, "preguntas/pr0"),
+                        {
+                            id: 0,
+                            enunciado: "¿Quién fué el programador original de monsieurPursuit?",
+                            respuesta: "soyMonsieur",
+                            categoria: "twitch"
+                        }).then(()=>{
+
+                            alert("Datos enviados");
+                            listaDatos();
+                        })
+                        .catch((error)=>{
+                            alert("CAPACHAO");
+                        })
+                }
+                else 
+                {
+
+                }
+            }
            })
            .catch((error)=>{
              alert("NOOOPE "+error);
@@ -184,7 +209,8 @@
      
                  
          document.getElementById('borrar').addEventListener('click',borraDato);
-         document.getElementById('listaPreguntasSelectorBoton').addEventListener('click',focusPregunta)
+         document.getElementById('listaPreguntasSelectorBoton').addEventListener('click',focusPregunta);
+         document.getElementById('listaPreguntasSelector').addEventListener('change',focusPregunta);
          document.getElementById('enviar').addEventListener('click', meteDatos);
          document.getElementById('nuevaPregunta').addEventListener('click', nuevaPregunta);
          
@@ -216,7 +242,7 @@
                 <input type="text" id="respuesta">
                 
                 <button id="enviar">Enviar/Actualizar</button>
-                <button id="borrar">Borrar</button>
+                <button id="borrar" class="borrar">Borrar</button>
                 <button id="nuevaPregunta">NuevaPregunta</button>
             </section>
             <section id="inspector" class="columna">

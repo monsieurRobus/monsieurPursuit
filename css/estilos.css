@@ -1,6 +1,7 @@
 body {
   background: rgb(208,255,140);
   background: linear-gradient(90deg, rgba(208,255,140,1) 0%, rgba(255,0,125,1) 100%);
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Bordered form */
@@ -27,6 +28,10 @@ form {
     border: none;
     cursor: pointer;
     width: 100%;
+  }
+
+  button.borrar {
+    background-color: #ed6d6b;
   }
   
   /* Add a hover effect for buttons */
