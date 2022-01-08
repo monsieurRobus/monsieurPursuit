@@ -61,6 +61,6 @@ body {
   /* Style the back side */
   .tarjeta-back {
     background-color: #5994aa;
-    color: white;
+    color: #5994aa;
     transform: rotateY(180deg);
   }

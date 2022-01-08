@@ -37,26 +37,42 @@
             var pregunta = document.getElementById("enunciadoPregunta");
             var respuesta = document.getElementById("respuesta");
 
+            function seleccionaDatos(id){
+           const dbref = ref(database);
+           get(child(dbref,"preguntas")).then((snapshot)=>{
+             if(snapshot.exists()){
+
+                // Comprobamos si la ID de la pregunta existe
+                var listaPreguntasAux = Object.keys(snapshot.val());
+                console.log(listaPreguntasAux);
+
+                for(var i=0;i<listaPreguntasAux.length;i++)
+                {
                     
-
-            function seleccionaDatos(numPregunta){
-              const dbref = ref(database);
-
-              get(child(dbref,"preguntas/"+numPregunta.toString())).then((snapshot)=>{
-                if(snapshot.exists()){
-                  pregunta.innerHTML = snapshot.val().enunciado;
-                  respuesta.innerHTML = snapshot.val().respuesta;
-                  console.log("dentro")
+                    var elementoAux = snapshot.val()[listaPreguntasAux[i]];
+                    
+                    if (elementoAux.id == id) {
+                        //idPregunta.innerHTML = elementoAux.id;
+                        pregunta.innerHTML = elementoAux.enunciado;
+                        respuesta.innerHTML = elementoAux.respuesta;
+                        //categoria.value = elementoAux.categoria;
+                    }                                      
+                    
                 }
-                else {
-                  alert("no hay datos");                }
-              })
-              .catch((error)=>{
-                alert("NOOOPE "+error);
-              });
+                 
+                 //listaDatos();
+             }
+             else {
+               alert("no hay datos");         
+                
             }
+           })
+           .catch((error)=>{
+             alert("NOOOPE "+error);
+           });
+         }
 
-            seleccionaDatos(2);
+            seleccionaDatos(1);
             
             </script>
     </head>

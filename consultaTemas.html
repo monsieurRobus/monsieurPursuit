@@ -32,8 +32,9 @@
          var respuesta = document.getElementById("respuesta");     
          var categoria = document.getElementById("categoria");    
          var listaPreguntas = document.getElementById("listaPreguntas");
+         var categoriasPreguntas = document.getElementById("categoriasPreguntas");
          var listaPreguntasSelector = document.getElementById("listaPreguntasSelector");
-      
+         var nombreCategoriaNueva = document.getElementById("nuevaCategoria");      
 
          // Funcion borradato
 
@@ -60,7 +61,7 @@
                 id: idPregunta.innerHTML,
                 enunciado: pregunta.value,
                 respuesta: respuesta.value,
-                categoria: categoria.value
+                categoria: categoriasPreguntas.value
             }).then(()=>{
 
                 alert("Datos enviados");
@@ -74,14 +75,32 @@
                 else {
                     console.log("cancelado");
                 }          
-            
+            listaDatos();
             }
 
          // Funcion de lista de datos
         function listaDatos(){
-
+            var categoriasAux = "";
+            var categoriasKeys = "";
             const dbref = ref(database);
+
+            get(child(dbref,"categorias")).then((snapshot)=>{
+                categoriasAux = snapshot.val();
+                
+                if(snapshot.exists()){
+                    categoriasKeys = Object.keys(snapshot.val());
+                    categoriasPreguntas.innerHTML = ""; // Vaciamos la lista
+                    for(var i=0;i<categoriasKeys.length;i++)
+                    {
+                        var elementoCategoria = snapshot.val()[categoriasKeys[i]];
+                        categoriasPreguntas.innerHTML += "<option value='"+categoriasKeys[i]+"'>Categoria "+categoriasKeys[i]+": "+elementoCategoria+"</option>";
+                    }
+                }
+
+            });
+
             get(child(dbref,"preguntas")).then((snapshot)=>{
+                
                 if(snapshot.exists()){
                     listaPreguntas.innerHTML = snapshot.val();
                     listaPreguntasSelector.innerHTML = ""
@@ -93,23 +112,22 @@
                     {
                         var elementoPregunta =snapshot.val()[preguntasKeys[i]];
                         listaPreguntasSelector.innerHTML += "<option value='"+elementoPregunta.id+"'>Pregunta "+elementoPregunta.id+"</option>"
-                        listaPreguntas.innerHTML += "<div class='containerPregunta' id='pregunta"+elementoPregunta.id+"'><div>ID PREGUNTA "+elementoPregunta.id+"<span class='borrar' id="+elementoPregunta.id+">&#10060;</span></div><h3>"+elementoPregunta.categoria+"</h3><p>"+elementoPregunta.enunciado+"</p><p>"+elementoPregunta.respuesta+"</p></div>"
+                        listaPreguntas.innerHTML += "<div class='containerPregunta' id='pregunta"+elementoPregunta.id+"'><div>ID PREGUNTA "+elementoPregunta.id+"<span class='borrar' id="+elementoPregunta.id+">&#10060;</span></div><h3>"+elementoPregunta.categoria+" "+categoriasAux[elementoPregunta.categoria]+"</h3><p>"+elementoPregunta.enunciado+"</p><p>"+elementoPregunta.respuesta+"</p></div>"
                         
-                    }
-
-                    
+                    }                   
                 
             }
             })
             .catch((error)=>{
                 alert("Error\n\n"+error);
             });
+
         }
 
         // Selecciona un dato en concreto
         function seleccionaDatos(id){
            const dbref = ref(database);
-
+            
 
            get(child(dbref,"preguntas")).then((snapshot)=>{
              if(snapshot.exists()){
@@ -122,16 +140,16 @@
                 {
                     var elementoAux = snapshot.val()[listaPreguntasAux[i]];
                     if (elementoAux.id == id) {
+
                         idPregunta.innerHTML = elementoAux.id;
                         pregunta.value = elementoAux.enunciado;
                         respuesta.value = elementoAux.respuesta;
                         categoria.value = elementoAux.categoria;
+                        listaPreguntasSelector.value = elementoAux.categoria;
+                        //console.log(elementoAux.categoria);
                     }
                     
-                    
-                    
                 }
-
                  
                  listaDatos();
              }
@@ -144,7 +162,7 @@
                             id: 0,
                             enunciado: "¿Quién fué el programador original de monsieurPursuit?",
                             respuesta: "soyMonsieur",
-                            categoria: "twitch"
+                            categoria: "tw22"
                         }).then(()=>{
 
                             alert("Datos enviados");
@@ -165,8 +183,6 @@
            });
          }
          
-
-
          //Introduce nueva pregunta
          var nuevaPregunta = () => {
             const dbref = ref(database);
@@ -203,17 +219,44 @@
          {
              var idSeleccionada = parseInt(document.getElementById('listaPreguntasSelector').value,10);
              seleccionaDatos(idSeleccionada);
+             var listaNodos = document.getElementById("listaPreguntasSelector").childNodes;
+
+             for (var i=0; i<listaNodos.length; i++)
+             {
+                listaNodos[i].removeAttribute("selected");
+             }
+             document.getElementById(document.getElementById('listaPreguntasSelector').value).setAttribute("selected",null);
          }
 
-        // Añadimos funcion BORRADATO a cada elemento BORRAR
-     
+        // NUEVA CATEGORIA
+
+        var nuevaCategoria = () => {
+            var cat = nombreCategoriaNueva.value;
+            if(cat.length>0){
+                
+                cat=cat.substring(0,2);
+                cat+="22";
+                console.log(cat);
+                const dbref = ref(database);
+                set(ref(database, "categorias/"+cat),nombreCategoriaNueva.value).then(()=>{
+
+                    alert("Datos enviados");
+                    listaDatos();
+                })
+                .catch((error)=>{
+                    alert("CAPACHAO");
+                });
+            }
+        }
+
+
                  
          document.getElementById('borrar').addEventListener('click',borraDato);
          document.getElementById('listaPreguntasSelectorBoton').addEventListener('click',focusPregunta);
          document.getElementById('listaPreguntasSelector').addEventListener('change',focusPregunta);
          document.getElementById('enviar').addEventListener('click', meteDatos);
          document.getElementById('nuevaPregunta').addEventListener('click', nuevaPregunta);
-         
+         document.getElementById('enviaNuevaCategoria').addEventListener('click',nuevaCategoria);
          listaDatos();
          seleccionaDatos(0);
          
@@ -225,18 +268,31 @@
         
     </head>
     <body>        
+        <h1>Gestión de preguntas</h1>
         <div class="fila">
             <section id="selectorTemas" class="columna">
                 <div>
                     <h1>Pregunta <span id="idPregunta"></span></h1>
-                    <select id="listaPreguntasSelector" name="cars">                 
-                      </select>
-                      <button id="listaPreguntasSelectorBoton">Ver pregunta</button>
+                    <select id="listaPreguntasSelector">                 
+                    </select>
+                    <button id="listaPreguntasSelectorBoton">Ver pregunta</button>
                 </div>
 
                 <label for="categoria">Categoría</label>
                 <input type="text" id="categoria">
-                <label for="enunciadoPregunta">Nombre </label>
+                <select id="categoriasPreguntas">
+
+                </select><br>
+                <div class="fila">
+                    <div class="columna">
+                        <input type="text" id="nuevaCategoria">
+                    </div>
+                    <div class="columna">
+                        <button id="enviaNuevaCategoria">Nueva Categoría</button>
+                    </div>
+
+                </div>
+                <label for="enunciadoPregunta">Enunciado </label>
                 <input type="text" id="enunciadoPregunta">                
                 <label for="respuesta">Respuesta</label>
                 <input type="text" id="respuesta">
@@ -244,10 +300,11 @@
                 <button id="enviar">Enviar/Actualizar</button>
                 <button id="borrar" class="borrar">Borrar</button>
                 <button id="nuevaPregunta">NuevaPregunta</button>
+                
             </section>
             <section id="inspector" class="columna">
                 <h1>
-                    Inspector de preguntas
+                    Lista de preguntas
                 </h1>
                 <div id="listaPreguntas">
 
