@@ -10,6 +10,25 @@
         <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
         <script defer src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
         <script type="module">
+
+             // ABRIMOS CANAL BROADCAST DENTRO DEL MODULO PARA QUE PUEDA ACCEDER DIRECTAMENTE A LA BBDD
+             const bc = new BroadcastChannel('tarjetaVoltear');
+
+              bc.onmessage = function (ev) { 
+                
+                
+                if(ev.data == "voltea"){
+
+                                        actualiza(ev)
+                }
+                else {
+                  
+                  seleccionaDatos(ev.data);
+                  console.log(ev.data);
+                      
+                  
+                }
+              };
             // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";            
           
@@ -38,39 +57,42 @@
             var respuesta = document.getElementById("respuesta");
 
             function seleccionaDatos(id){
-           const dbref = ref(database);
-           get(child(dbref,"preguntas")).then((snapshot)=>{
-             if(snapshot.exists()){
+              const dbref = ref(database);
+              get(child(dbref,"preguntas")).then((snapshot)=>{
+                if(snapshot.exists()){
 
-                // Comprobamos si la ID de la pregunta existe
-                var listaPreguntasAux = Object.keys(snapshot.val());
-                console.log(listaPreguntasAux);
+                    // Comprobamos si la ID de la pregunta existe
+                    var listaPreguntasAux = Object.keys(snapshot.val());
+                    console.log(listaPreguntasAux);
 
-                for(var i=0;i<listaPreguntasAux.length;i++)
-                {
+                    for(var i=0;i<listaPreguntasAux.length;i++)
+                    {
+                        
+                        var elementoAux = snapshot.val()[listaPreguntasAux[i]];
+                        
+                        if (elementoAux.id == id) {
+                            //idPregunta.innerHTML = elementoAux.id;
+                            pregunta.innerHTML = elementoAux.enunciado;
+                            respuesta.innerHTML = elementoAux.respuesta;
+                            //categoria.value = elementoAux.categoria;
+                        }                                      
+                        
+                    }
                     
-                    var elementoAux = snapshot.val()[listaPreguntasAux[i]];
-                    
-                    if (elementoAux.id == id) {
-                        //idPregunta.innerHTML = elementoAux.id;
-                        pregunta.innerHTML = elementoAux.enunciado;
-                        respuesta.innerHTML = elementoAux.respuesta;
-                        //categoria.value = elementoAux.categoria;
-                    }                                      
+                    //listaDatos();
+                }
+                else {
+                  alert("no hay datos");         
                     
                 }
-                 
-                 //listaDatos();
-             }
-             else {
-               alert("no hay datos");         
-                
+              })
+              .catch((error)=>{
+                alert("NOOOPE "+error);
+              });
             }
-           })
-           .catch((error)=>{
-             alert("NOOOPE "+error);
-           });
-         }
+
+                      
+          
 
             seleccionaDatos(1);
             
@@ -99,12 +121,7 @@
           </div>
           <script>
 
-            // ABRIMOS CANAL BROADCAST
-            const bc = new BroadcastChannel('tarjetaVoltear');
-            bc.onmessage = function (ev) { actualiza(ev) };
-            
            
-            
             
             
             // FUNCION DEL BROADCAT
@@ -117,19 +134,21 @@
                         {
                             existeClase = true;
                         }
-                    })
+                      })
 
-                    if(existeClase)
-                    {
-                        document.getElementById("tgt").classList.remove("girar");
-                    }
-                    else
-                    {
-                        document.getElementById("tgt").classList.add("girar");
-                    }
-                    
+                      if(existeClase)
+                      {
+                          document.getElementById("tgt").classList.remove("girar");
+                      }
+                      else
+                      {
+                          document.getElementById("tgt").classList.add("girar");
+                      }
+                      
 
-            }
+                    }
+            
+           
           </script>
         </body>
     

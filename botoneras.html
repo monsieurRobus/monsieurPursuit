@@ -3,17 +3,136 @@
 
     </head>
     <body>
-        <button onclick="actualiza()">
-            TEST
-        </button>
+        <div>
+            <button onclick="voltear()">
+                RESUELVE
+            </button>
+        </div>
         <input id="numero" type="number">
+        <div>
+            <select id="listadoPreguntas">
+            
+            </select>
+            <button onclick="actualizar()">
+                Cargar
+            </button>
+        </div>
+        
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";     
+
+            // CONFIGURACION DE LA BASE DE DATOS 
+            const firebaseConfig = {
+              apiKey: "AIzaSyBeFVAKcmVVMnkTF1Z2EVFSAahdCHKcvjA",
+              authDomain: "monsieurloresuit.firebaseapp.com",
+              projectId: "monsieurloresuit",
+              storageBucket: "monsieurloresuit.appspot.com",
+              messagingSenderId: "617689812422",
+              databaseURL: "https://monsieurloresuit-default-rtdb.europe-west1.firebasedatabase.app",
+              appId: "1:617689812422:web:f767dc493d6d9e343076c7"
+            };
+          
+            // Initialize database
+            const app = initializeApp(firebaseConfig);
+
+
+            import { getDatabase, ref, set, get, child, update, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+            const database = getDatabase();
+
+            var tarjetas = document.getElementById("tarjetas");
+
+            function seleccionaDatos(id){
+           const dbref = ref(database);
+            get(child(dbref,"preguntas")).then((snapshot)=>{
+                if(snapshot.exists()){
+
+                    // Comprobamos si la ID de la pregunta existe
+                    var listaPreguntasAux = Object.keys(snapshot.val());
+                    for(var i=0;i<listaPreguntasAux.length;i++)
+                    {
+                        
+                        var elementoAux = snapshot.val()[listaPreguntasAux[i]];
+                        
+                      /*  if (elementoAux.id == id) {
+                            pregunta.innerHTML = elementoAux.enunciado;
+                            respuesta.innerHTML = elementoAux.respuesta;
+                        }    */                                  
+                        
+                    }
+                    
+                    //listaDatos();
+                }
+                else {
+                alert("no hay datos");         
+                    
+                }
+            })
+            .catch((error)=>{
+                alert("NOOOPE "+error);
+            });
+            }
+
+            // LISTA DE PREGUNTAS
+            function listaDatos(){
+                const dbref = ref(database);               
+                var listado = document.getElementById("listadoPreguntas");
+                get(child(dbref,"preguntas")).then((snapshot)=>{
+                if(snapshot.exists()){
+
+                    // Comprobamos si la ID de la pregunta existe
+                    var listaPreguntasAux = Object.keys(snapshot.val());
+                    console.log(listaPreguntasAux);
+                    for(var i=0;i<listaPreguntasAux.length;i++)
+                    {
+                        
+                      var elementoAux = snapshot.val()[listaPreguntasAux[i]];
+                        listado.innerHTML += '<option id="'+snapshot.val()[listaPreguntasAux[i]].id+'" value="'+snapshot.val()[listaPreguntasAux[i]].id+'">Pregunta: '+listaPreguntasAux[i]+' - Categoria: '+snapshot.val()[listaPreguntasAux[i]].categoria+' </option>';
+
+                         /* 
+                        if (elementoAux.id == id) {
+                            pregunta.innerHTML = elementoAux.enunciado;
+                            respuesta.innerHTML = elementoAux.respuesta;
+                        }*/   
+                        
+                        
+                        
+                    }
+                    
+                    //listaDatos();
+                }
+                else {
+                alert("no hay datos");         
+                    
+                }
+            })
+            .catch((error)=>{
+                alert("NOOOPE "+error);
+            });
+            }
+
+            
+            
+
+            //FOCUS PREGUNTA
+           
+            listaDatos();
+            seleccionaDatos(1);
+            
+            </script>
         <script>
             const bc = new BroadcastChannel('tarjetaVoltear');
 
-            function actualiza() {
+            function voltear() {
                 bc.postMessage("voltea");
-                console.log(tag);
-    }
+                //console.log(tag);
+            }
+
+            function actualizar() {
+                var datoSeleccionado = document.getElementById("listadoPreguntas").value;
+                bc.postMessage(datoSeleccionado);
+                //console.log(dato)
+            }
         </script>
     </body>
 </html>
