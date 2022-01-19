@@ -1,12 +1,35 @@
 <html>
     <head>
+        <meta charset="UTF-8">
+        <style>
+            li {
+                font-size:2em;
+            }
+            li.ready {
+                color:greenyellow;
+            }
 
+            li.notready {
+                color:red;
+            }
+        </style>
     </head>
     <body>
         <div>
             <button onclick="voltear()">
                 RESUELVE
             </button>
+            <button onclick="document.reload()">
+                ACTUALIZAR
+            </button>
+            <ul>
+                <li id="signoready" class="notready">
+                    <button onclick="ready()">
+                        READY
+                    </button>
+                </li>
+            </ul>
+            
         </div>
         <input id="numero" type="number">
         <div>
@@ -17,6 +40,13 @@
                 Cargar
             </button>
         </div>
+        <hr>
+        <section>
+            <ul id="lista">
+            
+            </ul>
+        </section>
+        
         
         <script type="module">
             // Import the functions you need from the SDKs you need
@@ -110,29 +140,17 @@
                 alert("NOOOPE "+error);
             });
             }
-
-            
-            
-
+         
             //FOCUS PREGUNTA
            
             listaDatos();
             seleccionaDatos(1);
             
-            </script>
-        <script>
-            const bc = new BroadcastChannel('tarjetaVoltear');
-
-            function voltear() {
-                bc.postMessage("voltea");
-                //console.log(tag);
-            }
-
-            function actualizar() {
-                var datoSeleccionado = document.getElementById("listadoPreguntas").value;
-                bc.postMessage(datoSeleccionado);
-                //console.log(dato)
-            }
         </script>
+        <script src="js/juego.js"></script>
+        <script  src="js/tmi.js"></script>
+        <script src="js/cartas.js"></script>
+        <script src="js/chat.js"></script>
+  
     </body>
 </html>
