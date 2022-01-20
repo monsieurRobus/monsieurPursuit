@@ -16,7 +16,16 @@ let ready = () => {
     {
         document.getElementById("signoready").classList.remove("ready");
         document.getElementById("signoready").classList.add("notready");
+        
+
     }
    
     
+}
+
+let vaciaJuego = () =>
+{
+    jugadores=[];
+    document.getElementById("lista").innerHTML='';
+    client.say('soyMonsieur', `Admin ha vaciado a todos los jugadores!`);
 }
