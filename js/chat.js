@@ -50,3 +50,8 @@ let borrarUser  = (usuario) => {
     }
     return false;
 }
+
+var actualizarVentana = () =>{
+
+    document.reload();
+}

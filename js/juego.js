@@ -1,6 +1,7 @@
 // DEFINIMOS VARIABLES
 let jugadores=[];
 let lobbyMode=false;
+let preguntaActiva=false;
 
 let ready = () => {
     lobbyMode=!lobbyMode;    

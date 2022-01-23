@@ -1,27 +1,22 @@
 <html>
     <head>
+        <link rel="stylesheet" href="css/botonera.css">
         <meta charset="UTF-8">
         <style>
-            li {
-                font-size:2em;
-            }
-            li.ready {
-                color:greenyellow;
-            }
-
-            li.notready {
-                color:red;
-            }
+          
         </style>
     </head>
     <body>
+        <div class="contenedor">
+            <button onclick="apareceCarta(true)">&#128064;MOSTRAR</button>
+            <button onclick="voltear()">&#128270;RESOLVER</button>
+            <button onclick="apareceCarta(false)">&#128721;OCULTAR</button>
+            <button id="reload">&#128257;ACTUALIZAR</button>
+            <button>&#9194;ANTERIOR</button>
+            <button>SIGUIENTE&#9193;</button>
+        </div>
         <div>
-            <button onclick="voltear()">
-                RESUELVE
-            </button>
-            <button onclick="document.reload()">
-                ACTUALIZAR
-            </button>
+
             <ul>
                 <li id="signoready" class="notready">
                     <button onclick="ready()">
