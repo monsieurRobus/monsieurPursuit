@@ -32,7 +32,7 @@ client.on('message', (channel, tags, message, self) => {
         botonBorrar.addEventListener('click',borrarUser(""+tags.username));
         }
 
-    else if(!lobbyMode) 
+    else if(message.toLowerCase() === '!mp join' && !lobbyMode) 
     {
         client.say(channel, `@${tags.username}, monsieurPursuit no está activo!`);
     }

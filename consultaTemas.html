@@ -192,13 +192,14 @@
                     
                     // Longitud de la lista
                     var longitud = Object.keys(snapshot.val()).length;
-                  
+
                     if (longitud<1){
                         idPregunta.innerHTML = 0;
                     }
                     else {
                        
-                        idPregunta.innerHTML = parseInt(snapshot.val()[Object.keys(snapshot.val())[longitud-1]].id,10)+1;
+                        idPregunta.innerHTML = longitud;
+                      
                     }
                     console.log(snapshot.val()[Object.keys(snapshot.val())[longitud-1]].id);
                     
