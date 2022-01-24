@@ -12,6 +12,18 @@ function actualizar() {
     //console.log(dato)
 }
 
+function apareceCarta(a){
+
+    if(a)
+        bc.postMessage("aparece");
+    else
+        bc.postMessage("desaparece");
+}
+
+function revelaEnunciado(){
+    bc.postMessage("revelaEnunciado");
+}
+
 var reload = document.getElementById("reload");
 
 reload.addEventListener('click', _ => { // el _ es para indicar la ausencia de parametros

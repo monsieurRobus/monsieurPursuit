@@ -8,12 +8,12 @@
     </head>
     <body>
         <div class="contenedor">
-            <button onclick="apareceCarta(true)">&#128064;MOSTRAR</button>
-            <button onclick="voltear()">&#128270;RESOLVER</button>
-            <button onclick="apareceCarta(false)">&#128721;OCULTAR</button>
-            <button id="reload">&#128257;ACTUALIZAR</button>
-            <button>&#9194;ANTERIOR</button>
-            <button>SIGUIENTE&#9193;</button>
+            <button onclick="apareceCarta(true)">&#128064;DENTRO CARTA</button>
+            <button onclick="revelaEnunciado(false)">&#10068;REVELA ENUNCIADO</button>   
+            <button onclick="voltear()">&#128270;GIRA CARTA</button>
+            <button onclick="apareceCarta(false)">&#128721;OCULTA CARTA</button>                  
+            <button>&#9194;CARTA ANTERIOR</button>
+            <button>CARTA SIGUIENTE&#9193;</button>
         </div>
         <div>
 
@@ -25,6 +25,10 @@
                     <button onclick="vaciaJuego()">
                         VACIAR
                     </button>
+                </li>
+                <li>
+                    
+            <button id="reload">&#128257;ACTUALIZAR BOTONERA</button>
                 </li>
             </ul>
             

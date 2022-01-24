@@ -14,7 +14,11 @@ client.on('message', (channel, tags, message, self) => {
     if(self) return;
 
     // ENTRAMOS EN EL JUEGO
-    if(message.toLowerCase() === '!mp join' && lobbyMode){
+    if(message.toLowerCase() === '!respuesta' && juegoActivo){
+
+        //POR HACER
+        //MIRAR EL MODO DE JUEGO
+        // 1. SI ES CON EL CHAT, MIRAR SI EL JUGADOR YA HA RESPONDIDO, SI NO, ALMACENAMOS SU RESPUESTA (por hacer)
         
         client.say(channel, `@${tags.username}, estas dentro!`);
         jugadores.push(tags.username);
@@ -32,7 +36,7 @@ client.on('message', (channel, tags, message, self) => {
         botonBorrar.addEventListener('click',borrarUser(""+tags.username));
         }
 
-    else if(message.toLowerCase() === '!mp join' && !lobbyMode) 
+    else if(message.toLowerCase() === '!respuesta' && !juegoActivo) 
     {
         client.say(channel, `@${tags.username}, monsieurPursuit no está activo!`);
     }

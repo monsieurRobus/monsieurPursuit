@@ -1,12 +1,12 @@
 // DEFINIMOS VARIABLES
 let jugadores=[];
-let lobbyMode=false;
 let preguntaActiva=false;
+let juegoActivo=false;
 
 let ready = () => {
-    lobbyMode=!lobbyMode;    
+    juegoActivo=!juegoActivo;    
 
-    if(lobbyMode) 
+    if(juegoActivo) 
     {
         document.getElementById("signoready").classList.remove("notready");
         document.getElementById("signoready").classList.add("ready");

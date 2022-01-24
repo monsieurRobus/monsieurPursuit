@@ -14,24 +14,4 @@ li.ready {
 li.notready {
     color:red;
 }
-/* ANIMASIONES */
 
-@keyframes fadeIn
-{
-    from {opacity:0;}
-    to {opacity:1;}
-}
-
-@keyframes apareceDerecha {
-    
-}
-.aparece {
-    animation-name: fadeIn;
-    animation-duration: 1s;
-}
-
-.desaparece {
-    animation-name: fadeIn;
-    animation-duration: 1s;
-    animation-direction: reverse;
-}
