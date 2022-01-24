@@ -35,7 +35,6 @@ body {
     top: 50px;
     width: 700px;
     height: 400px;
-    background-color: #f1f1f1;
     font-size:3rem;
 
   }
@@ -60,14 +59,14 @@ body {
   
   /* Style the front side (fallback if image is missing) */
   .tarjeta-front {
-    background-color: #5994aa;
-    color: black;
+    background-image: url("../img/fondoTest.png");
+    color: #f5f5f5;
   }
   
   /* Style the back side */
   .tarjeta-back {
-    background-color: #5994aa;
-    color: #5994aa;
+    background-image: url("../img/fondoBack.png");
+    color: #f5f5f5;
     transform: rotateY(180deg);
   }
 
