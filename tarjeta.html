@@ -88,19 +88,46 @@
                 if(snapshot.exists()){
 
                     // Comprobamos si la ID de la pregunta existe
-                    var listaPreguntasAux = Object.keys(snapshot.val());
+                    let listaPreguntasAux = Object.keys(snapshot.val());
                     console.log(listaPreguntasAux);
 
                     for(var i=0;i<listaPreguntasAux.length;i++)
                     {
                         
-                        var elementoAux = snapshot.val()[listaPreguntasAux[i]];
+                        let elementoAux = snapshot.val()[listaPreguntasAux[i]];
+                        
                         
                         if (elementoAux.id == id) {
                             //idPregunta.innerHTML = elementoAux.id;
                             pregunta.innerHTML = elementoAux.enunciado;
                             respuesta.innerHTML = elementoAux.respuesta;
-                            categoria.innerHTML = elementoAux.categoria;
+
+                            // Traductor de ID CATEGORIA a CATEGORIA DE PREGUNTA para que aparezca en la tajeta
+                            get(child(dbref,"categorias")).then((snapshot)=>{
+                              if (snapshot.exists()){
+                               
+                                
+                                let auxString = snapshot.val()[elementoAux.categoria]
+                                
+                                let index = auxString.includes("-");
+
+                                if(index) 
+                                {
+                                  categoria.innerHTML = auxString.split("- ")[1];
+                                }
+                                else
+                                {
+                                  categoria.innerHTML = auxString;
+                                }                             
+
+
+                              }
+                            });
+                            
+
+
+
+
                         }                                      
                         
                     }

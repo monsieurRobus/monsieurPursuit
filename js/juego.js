@@ -28,5 +28,6 @@ let vaciaJuego = () =>
 {
     jugadores=[];
     document.getElementById("lista").innerHTML='';
+    console.log(jugadores);
     client.say('soyMonsieur', `Admin ha vaciado a todos los jugadores!`);
 }
