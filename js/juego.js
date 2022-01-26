@@ -1,5 +1,6 @@
 // DEFINIMOS VARIABLES
 let jugadores=[];
+let ranking=[];
 let preguntaActiva=false;
 let juegoActivo=false;
 

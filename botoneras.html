@@ -25,6 +25,7 @@
                     <button onclick="vaciaJuego()">
                         VACIAR
                     </button>
+                    <label>Puntos acierto completo: </label><input type="number" id="puntosAcierto" value="100"><label>Puntos acierto empate: </label><input type="number" id="puntosEmpate" value="50">
                 </li>
                 <li>
                     
@@ -44,7 +45,7 @@
         </div>
         <hr>
         <section>
-            <ul id="lista">
+            <ul id="lista" onclick="eventoJugador(event)">
             
             </ul>
         </section>

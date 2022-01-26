@@ -6,7 +6,7 @@
 }
 
 li {
-    font-size:2em;
+    font-size:1em;
 }
 li.ready {
     color:greenyellow;
@@ -14,6 +14,9 @@ li.ready {
 
 li.notready {
     color:red;
+}
+li label {
+    color:black;
 }
 
 body {
